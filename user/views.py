@@ -3,29 +3,24 @@ from rest_framework import status
 from .serializer import AuthUserSerializer
 from rest_framework.decorators import api_view
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from django.contrib.auth import hashers
 from .forms import *
-from django.core import serializers
-import json
+from datetime import datetime
+from django.core.paginator import Paginator
 
 
 @api_view(['POST'], )
 def UserCreateAPIView(request):
     form = UserRegisterForm(data=request.POST)
     if form.is_valid():
-        data = {'username': request.data['username'], 'email': request.data['email'],
-                'password': request.data['password']}
-        serializer = AuthUserSerializer(data=data)
+        serializer = AuthUserSerializer(data=form.cleaned_data)
         if serializer.is_valid():
             serializer.save()
-            return Response({'message': 'signup successful'}, status=status.HTTP_201_CREATED)
+            return Response({'message': 'successfully signup'}, status=status.HTTP_201_CREATED)
         else:
             data = {"data": serializer._errors}
-            print(data)
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
     data = {'data': form._errors}
-    print(data)
     return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -34,51 +29,37 @@ def UserLoginAPIView(request):
     if User.objects.filter(email=request.data['email']).exists():
         user_obj = User.objects.get(email=request.data['email'])
         if user_obj.check_password(request.data['password']):
-            serializer = TokenObtainPairSerializer(
-                data={'email': request.data['email'], 'password': request.data['password']})
+            serializer = TokenObtainPairSerializer(data=request.data)
             token = serializer.validate({'username': user_obj.username, 'password': request.data['password']})
-            print(token)
-            data = {'email': request.data['email'], 'token': token['access']}
+            user_obj.last_login = datetime.now()
+            user_obj.save()
+            serializer = AuthUserSerializer(instance=user_obj, many=False)
+            data = {'user': serializer.data, 'token': token['access']}
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
-
-    data = {'data': 'Invalid user'}
-    print(data)
+        data = {'data': 'Invalid User'}
     return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
 
+# localhost:8888/api/v1/user/list/?page=1&limit=10
 @api_view(['GET'], )
 def UserListAPIView(request):
+    page = 1 if 'page' not in request.GET else 1 if not request.GET['page'] else request.GET['page']
+    limit = 5 if 'limit' not in request.GET else 5 if not request.GET['limit'] else request.GET['limit']
     if request.user.is_superuser:
         user_obj = User.objects.all()
-        user_list = AuthUserSerializer(instance=user_obj)
-        data = {'users': user_list}
+        paginator = Paginator(user_obj, limit)
+        users = paginator.page(page)
+        serializer = AuthUserSerializer(instance=users, many=True)
+        data = {'users': serializer.data}
         return Response(data, status=status.HTTP_200_OK)
     data = {'data': 'Unauthorized request'}
-    print(data)
     return Response(data, status=status.HTTP_401_UNAUTHORIZED)
 
 
 @api_view(['GET'], )
 def UserDetailAPIView(request):
-    print(request.user)
-    if User.objects.filter(username=request.user).exists():
-        user_obj = User.objects.get(id=request.user.id)
-        if user_obj.is_superuser:
-            user_obj = User.objects.all()
-            user_list = serializers.serialize('json', user_obj)
-            data = {'users': user_list}
-            return Response(data, status=status.HTTP_200_OK)
-        else:
-            user_list = json.loads(serializers.serialize('json', [user_obj], ensure_ascii=False))
-            print(user_list[0]['fields'])
-            del user_list[0]['fields']['password']
-            data = {'users': user_list}
-            return Response(data, status=status.HTTP_200_OK)
-    data = {'data': 'Invalid request'}
-    print(data)
-    return Response(data, status=status.HTTP_400_BAD_REQUEST)
+    serializer = AuthUserSerializer(instance=request.user, many=False)
+    data = {'users': serializer.data}
+    return Response(data, status=status.HTTP_200_OK)
 
 
-from django.shortcuts import render
-
-# Create your views here.

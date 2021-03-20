@@ -23,5 +23,4 @@ urlpatterns = [
     path('api/v1/login/', views.UserLoginAPIView),
     path('api/v1/user/list/', views.UserListAPIView),
     path('api/v1/user/details/', views.UserDetailAPIView),
-
 ]

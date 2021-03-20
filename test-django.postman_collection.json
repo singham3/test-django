@@ -1,0 +1,164 @@
+{
+	"info": {
+		"_postman_id": "88e145ab-f0ef-47f9-ae65-57acbbfce199",
+		"name": "test-django",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:8888/api/v1/login/",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "andy",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "andy@test.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "asdf",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8888/api/v1/login/",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"v1",
+						"login",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8888/api/v1/user/list/?page=1&limit=10",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE2MzIyNzc4LCJqdGkiOiI3NDgzNTY5NWQyY2M0ZmQyYWRjOWNkNjk0ZWFmNjk0YyIsInVzZXJfaWQiOjR9.rNSawLP7aAj_ua2mpfG_fT0z0sWbXZt0cZqHOZRzQjY",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:8888/api/v1/user/list/?page=1&limit=10",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"list",
+						""
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8888/api/v1/signup/",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "bella6461",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "bella6461@test.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "asdf",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8888/api/v1/signup/",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"v1",
+						"signup",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8888/api/v1/user/details/",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjE2MzIyNzc4LCJqdGkiOiI3NDgzNTY5NWQyY2M0ZmQyYWRjOWNkNjk0ZWFmNjk0YyIsInVzZXJfaWQiOjR9.rNSawLP7aAj_ua2mpfG_fT0z0sWbXZt0cZqHOZRzQjY",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8888/api/v1/user/details/",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"details",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

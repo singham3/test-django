@@ -3,7 +3,7 @@ from django.utils.deprecation import MiddlewareMixin
 from django.http import JsonResponse
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-View_class = ['UserCreateAPIView','UserLoginAPIView']
+View_class = ['UserCreateAPIView', 'UserLoginAPIView']
 
 
 class CommonMiddleware(MiddlewareMixin):
@@ -12,18 +12,19 @@ class CommonMiddleware(MiddlewareMixin):
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         try:
-            # print('+++',request.user)
             if request.user.is_authenticated:
                 return None
-            # print(list(view_func))
             if view_func.__name__ not in View_class:
-                print(request.user , request.user.is_authenticated)
-                if bool(request.user and request.user.is_authenticated):
-                    # raw_token = jwt_object.get_raw_token(header)
-                    # validated_token = jwt_object.get_validated_token(raw_token)
-                    # request.user = jwt_object.get_user(validated_token)
-                    # # if request.user.token != str(validated_token):
-                    # #     return JsonResponse({'error': "User Not Login"}, status=200)
+                jwt_object = JWTAuthentication()
+                header = jwt_object.get_header(request)
+                print("header == ", header)
+                if header is not None:
+                    raw_token = jwt_object.get_raw_token(header)
+                    print("raw_token = ", raw_token)
+                    validated_token = jwt_object.get_validated_token(raw_token)
+                    print("validated_token == ", validated_token)
+                    request.user = jwt_object.get_user(validated_token)
+                    print("request.user === ", request.user)
                     return None
                 return JsonResponse({'error': "Invalid Token"}, status=200)
         except Exception as e:
