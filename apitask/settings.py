@@ -60,7 +60,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'user.middleware.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'apitask.urls'
@@ -82,6 +81,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'apitask.wsgi.application'
+AUTH_USER_MODEL = 'user.User'
 
 
 # Database
@@ -93,7 +93,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 
 # Password validation
@@ -113,12 +112,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
-}
 
 
 # Internationalization

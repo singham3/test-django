@@ -19,8 +19,8 @@ from user import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/signup/', views.UserCreateAPIView),
-    path('api/v1/login/', views.UserLoginAPIView),
-    path('api/v1/user/list/', views.UserListAPIView),
-    path('api/v1/user/details/', views.UserDetailAPIView),
+    path('api/v1/signup/', views.user_create_view),
+    path('api/v1/login/', views.user_login_view),
+    path('api/v1/user/list/', views.user_list_view),
+    path('api/v1/user/details/', views.user_detail_view),
 ]
