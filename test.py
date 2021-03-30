@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from selenium import webdriver
+# from selenium import webdriver
 import requests
 import json
 import re
@@ -29,14 +29,15 @@ def get_sub_sub_cat(url):
         ).replace(
             '</script>', ''
         )
-    data = json.loads(category_data)
-    sub_sub_cats = []
-    for i in data['props']['snData']['category']['categoryGalleryData'][0]['values'][0]['childs'][0]['childs']:
-        sub_sub_cats.append(i['name'])
-    return sub_sub_cats
+        data = json.loads(category_data)
+        sub_sub_cats = []
+        for i in data['props']['snData']['category']['categoryGalleryData'][0]['values'][0]['childs'][0]['childs']:
+            sub_sub_cats.append(i['name'])
+        return sub_sub_cats
+    return []
 
 
-# get_sub_sub_cat('https://www.alibaba.com/catalog/curtain-carpet-cushion_cid205784406')
+get_sub_sub_cat('https://www.alibaba.com/catalog/agricultural-waste_cid138')
 for cat in cats:
     cat_dict = {cat.text: []}
     for sub_cat in cat.findNext('ul'):
@@ -47,6 +48,6 @@ for cat in cats:
             n_dict[n.text] = get_sub_sub_cat('https://www.alibaba.com/catalog' + n.get('href').lower().replace('pid', 'cid'))
             cat_dict[cat.text].append(n_dict)
     cat_list.append(cat_dict)
-    open('test.txt', 'w').write(str(cat_list))
+    open('test1.txt', 'w').write(str(cat_list))
 
 print(cat_list, len(cat_list))
